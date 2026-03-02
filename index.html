@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение на свадьбу Александра и Ксении</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #bda982;
+            --text: #333;
+            --bg: #fdfdfd;
+        }
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text);
+            background-color: var(--bg);
+            line-height: 1.6;
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+        }
+        section {
+            padding: 60px 20px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        /* Главный экран */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('photo.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-shadow: 1px 1px 10px rgba(0,0,0,0.5);
+        }
+        .hero h1 { font-size: 3rem; margin-bottom: 10px; }
+        .hero p { font-size: 1.5rem; letter-spacing: 2px; }
+
+        /* Текст обращения */
+        .intro h2 { color: var(--gold); font-size: 2rem; }
+        .intro p { font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        /* Тайминг */
+        .timeline { background: #f9f6f0; }
+        .event {
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .time {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--gold);
+            border-bottom: 1px solid var(--gold);
+            margin-bottom: 5px;
+        }
+        .location { font-style: italic; color: #666; }
+
+        /* Пожелания */
+        .wishes { border-top: 1px solid #eee; }
+        .accent-box {
+            border: 1px solid var(--gold);
+            padding: 20px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <p>15.05.2026</p>
+        <h1>Александр & Ксения</h1>
+        <p>Приглашаем на нашу свадьбу</p>
+    </header>
+
+    <section class="intro">
+        <h2>Этот момент настал!</h2>
+        <p>Совсем скоро состоится наша свадьба, и мы будем счастливы, если Вы разделите с нами этот чудесный день!</p>
+    </section>
+
+    <section class="timeline">
+        <h2>Программа дня</h2>
+        
+        <div class="event">
+            <span class="time">13:00</span>
+            <strong>Венчание</strong>
+            <span class="location">Храм Христа Спасителя</span>
+        </div>
+
+        <div class="event">
+            <span class="time">14:00</span>
+            <strong>Трансфер</strong>
+            <span class="location">до места проведения торжества</span>
+        </div>
+
+        <div class="event">
+            <span class="time">15:00</span>
+            <strong>Церемония бракосочетания</strong>
+            <span class="location">"Хутор Столинский"</span>
+        </div>
+
+        <div class="event">
+            <span class="time">16:00</span>
+            <strong>Праздничный банкет</strong>
+            <span class="location">"Хутор Столинский"</span>
+        </div>
+    </section>
+
+    <section class="wishes">
+        <h2>Пожелания</h2>
+        <p>Пожалуйста, не дарите нам цветы! Мы не успеем насладиться их красотой и ароматом.</p>
+        <div class="accent-box">
+            Вместо них мы будем рады <strong>вашим улыбкам и хорошему настроению!</strong>
+        </div>
+    </section>
+
+    <footer style="padding: 40px; text-align: center; font-size: 0.8rem; color: #999;">
+        До встречи 15 мая 2026 года!
+    </footer>
+
+</body>
+</html>
