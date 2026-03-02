@@ -1,132 +1,359 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Приглашение на свадьбу Александра и Ксении</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --gold: #bda982;
-            --text: #333;
-            --bg: #fdfdfd;
-        }
-        body {
-            margin: 0;
-            font-family: 'Montserrat', sans-serif;
-            color: var(--text);
-            background-color: var(--bg);
-            line-height: 1.6;
-        }
-        h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 400;
-        }
-        section {
-            padding: 60px 20px;
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        /* Главный экран */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('photo.jpg');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-shadow: 1px 1px 10px rgba(0,0,0,0.5);
-        }
-        .hero h1 { font-size: 3rem; margin-bottom: 10px; }
-        .hero p { font-size: 1.5rem; letter-spacing: 2px; }
+import React, { useState, useEffect } from 'react';
+import { 
+  Heart, MapPin, Calendar, Clock, Music, Check, X, 
+  Camera, MailOpen, ChevronDown, Gift, Info, Utensils, 
+  Bus, Sparkles, Star, Phone, Church
+} from 'lucide-react';
 
-        /* Текст обращения */
-        .intro h2 { color: var(--gold); font-size: 2rem; }
-        .intro p { font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+// --- КОНФИГУРАЦИЯ (Все данные обновлены согласно вашему запросу) ---
+const CONFIG = {
+  names: "Александр & Ксения",
+  weddingDate: "2026-05-15T13:00:00",
+  rsvpDeadline: "2026-04-15",
+  location: {
+    name: "Хутор Столинский",
+    address: "Торжественный комплекс «Хутор Столинский»",
+    link: "https://yandex.ru/maps/?text=Хутор+Столинский"
+  },
+  heroTitle: "Этот момент настал!",
+  introText: "Совсем скоро состоится наша свадьба, и мы будем счастливы, если Вы разделите с нами этот чудесный день!",
+  palette: [
+    { hex: "#FFFFFF", name: "Белоснежный" },
+    { hex: "#F3F4F1", name: "Светлый мрамор" },
+    { hex: "#A3B18A", name: "Шалфей" },
+    { hex: "#588157", name: "Оливковый" },
+    { hex: "#344E41", name: "Темная хвоя" }
+  ],
+  timeline: [
+    { time: "13:00", event: "Венчание в Храме Христа Спасителя", icon: <Church className="w-5 h-5" /> },
+    { time: "14:00", event: "Трансфер до места проведения торжества", icon: <Bus className="w-5 h-5" /> },
+    { time: "15:00", event: "Церемония бракосочетания", icon: <Heart className="w-5 h-5" /> },
+    { time: "16:00", event: "Праздничный банкет", icon: <Utensils className="w-5 h-5" /> }
+  ],
+  giftText: "Пожалуйста, не дарите нам цветы! Мы не успеем насладиться их красотой и ароматом. Вместо них мы будем рады получить от Вас бутылочку вашего любимого напитка, которая станет частью наших теплых встреч.",
+  contact: {
+    name: "Ксения",
+    phone: "+375333809687"
+  }
+};
 
-        /* Тайминг */
-        .timeline { background: #f9f6f0; }
-        .event {
-            margin-bottom: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .time {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--gold);
-            border-bottom: 1px solid var(--gold);
-            margin-bottom: 5px;
-        }
-        .location { font-style: italic; color: #666; }
+const FloralOrnament = ({ className }) => (
+  <svg viewBox="0 0 100 100" className={className} fill="none" stroke="currentColor">
+    <path d="M50 10 Q60 30 50 50 Q40 30 50 10" strokeWidth="1" />
+    <path d="M50 50 Q80 60 50 90 Q20 60 50 50" strokeWidth="1" />
+    <circle cx="50" cy="50" r="2" fill="currentColor" />
+  </svg>
+);
 
-        /* Пожелания */
-        .wishes { border-top: 1px solid #eee; }
-        .accent-box {
-            border: 1px solid var(--gold);
-            padding: 20px;
-            display: inline-block;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
+const App = () => {
+  const [isOpened, setIsOpened] = useState(false);
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [rsvpStatus, setRsvpStatus] = useState(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formData, setFormData] = useState({ name: '', food: '', drink: '', transfer: false });
 
-    <header class="hero">
-        <p>15.05.2026</p>
-        <h1>Александр & Ксения</h1>
-        <p>Приглашаем на нашу свадьбу</p>
-    </header>
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const difference = +new Date(CONFIG.weddingDate) - +new Date();
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60)
+        });
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-    <section class="intro">
-        <h2>Этот момент настал!</h2>
-        <p>Совсем скоро состоится наша свадьба, и мы будем счастливы, если Вы разделите с нами этот чудесный день!</p>
-    </section>
+  const handleRsvpSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+    console.log("RSVP Data:", { ...formData, rsvpStatus });
+  };
 
-    <section class="timeline">
-        <h2>Программа дня</h2>
+  if (!isOpened) {
+    return (
+      <div className="fixed inset-0 bg-[#f9faf8] flex flex-col items-center justify-center z-50 p-6 text-center">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet" />
+        <div className="relative mb-12">
+          <div className="absolute -inset-8 border border-[#588157]/20 rounded-full animate-[spin_15s_linear_infinite]"></div>
+          <div className="bg-white p-10 rounded-full shadow-2xl relative z-10 border border-[#eef0eb]">
+            <MailOpen className="w-14 h-14 text-[#588157]" />
+          </div>
+        </div>
+        <h1 className="text-4xl font-serif text-[#2d2d2d] mb-4 tracking-wide">{CONFIG.names}</h1>
+        <p className="text-[#588157] mb-10 font-light tracking-[0.4em] uppercase text-xs">Приглашение на свадьбу</p>
+        <button 
+          onClick={() => setIsOpened(true)}
+          className="px-16 py-4 rounded-full bg-[#344e41] text-white transition-all hover:bg-[#588157] hover:scale-105 active:scale-95 shadow-xl tracking-[0.2em] font-light text-sm"
+        >
+          ОТКРЫТЬ
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#f9faf8] text-[#2d2d2d] font-light selection:bg-[#a3b18a] selection:text-white">
+      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet" />
+      
+      <style>{`
+        body { font-family: 'Montserrat', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade { animation: fadeIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+      `}</style>
+
+      {/* Hero Section */}
+      <section className="relative h-[100svh] flex items-center justify-center text-center p-6 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          {/* Здесь пользователь может заменить URL на свое фото */}
+          <img 
+            src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=2069" 
+            className="w-full h-full object-cover opacity-30 scale-105" 
+            alt="Wedding Mood"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f9faf8]"></div>
+        </div>
         
-        <div class="event">
-            <span class="time">13:00</span>
-            <strong>Венчание</strong>
-            <span class="location">Храм Христа Спасителя</span>
+        <div className="max-w-4xl z-10 animate-fade">
+          <p className="text-[10px] tracking-[0.6em] uppercase mb-12 text-[#588157] font-bold">Save the Date</p>
+          <h1 className="text-7xl md:text-9xl font-serif mb-10 text-[#1a1a1a] leading-[0.85]">
+            <span className="block mb-4">Александр</span>
+            <span className="text-3xl md:text-5xl block italic font-light opacity-40 my-6">&</span>
+            <span className="block">Ксения</span>
+          </h1>
+          <div className="flex flex-col items-center gap-6">
+            <div className="h-[1px] w-20 bg-[#588157]/40"></div>
+            <p className="text-2xl md:text-3xl font-serif italic tracking-widest">
+              15 мая 2026
+            </p>
+            <div className="h-[1px] w-20 bg-[#588157]/40"></div>
+          </div>
+          <div className="mt-20 animate-bounce opacity-20">
+            <ChevronDown className="w-6 h-6 mx-auto" />
+          </div>
         </div>
+      </section>
 
-        <div class="event">
-            <span class="time">14:00</span>
-            <strong>Трансфер</strong>
-            <span class="location">до места проведения торжества</span>
+      {/* Наша история / Обращение */}
+      <section className="py-32 px-6 bg-white overflow-hidden text-center">
+        <div className="max-w-3xl mx-auto relative">
+          <FloralOrnament className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-32 text-[#f3f4f1] -z-0" />
+          <div className="relative z-10 space-y-10">
+            <Heart className="w-6 h-6 text-[#a3b18a] mx-auto" />
+            <h2 className="text-4xl md:text-5xl font-serif italic">{CONFIG.heroTitle}</h2>
+            <p className="text-xl leading-relaxed text-gray-500 italic font-light px-4 md:px-0">
+              {CONFIG.introText}
+            </p>
+          </div>
         </div>
+      </section>
 
-        <div class="event">
-            <span class="time">15:00</span>
-            <strong>Церемония бракосочетания</strong>
-            <span class="location">"Хутор Столинский"</span>
+      {/* Таймер */}
+      <section className="py-24 bg-[#f9faf8] px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-[10px] uppercase tracking-[0.4em] text-[#588157] mb-16 font-bold opacity-70">До начала торжества</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+            {[
+              { label: 'дней', val: timeLeft.days },
+              { label: 'часов', val: timeLeft.hours },
+              { label: 'минут', val: timeLeft.minutes },
+              { label: 'секунд', val: timeLeft.seconds }
+            ].map((item, idx) => (
+              <div key={idx} className="bg-white p-8 rounded-[2rem] shadow-sm border border-[#eef0eb] transition-transform hover:-translate-y-1">
+                <span className="text-4xl md:text-5xl font-serif text-[#344e41]">{item.val}</span>
+                <span className="block text-[9px] uppercase tracking-widest text-[#588157] mt-4 font-bold">{item.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
+      </section>
 
-        <div class="event">
-            <span class="time">16:00</span>
-            <strong>Праздничный банкет</strong>
-            <span class="location">"Хутор Столинский"</span>
+      {/* Тайминг */}
+      <section className="py-32 px-6 bg-white">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-4xl font-serif text-center mb-24 italic">Свадебный тайминг</h2>
+          <div className="space-y-16 relative">
+            {/* Vertical Line */}
+            <div className="absolute left-[21px] md:left-1/2 top-0 bottom-0 w-[1px] bg-[#eef0eb] hidden md:block"></div>
+            
+            {CONFIG.timeline.map((item, index) => (
+              <div key={index} className={`flex items-center gap-8 md:gap-16 group ${index % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
+                <div className="text-[#588157] font-serif text-2xl w-16 md:w-1/2 md:text-right hidden md:block">
+                  {index % 2 === 0 ? item.time : ''}
+                </div>
+                
+                <div className="relative z-10 w-11 h-11 shrink-0 rounded-full bg-[#344e41] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  {item.icon}
+                </div>
+
+                <div className="flex-1 md:w-1/2">
+                  <div className="md:hidden text-[#588157] font-bold text-sm mb-1">{item.time}</div>
+                  <h3 className="text-xl font-serif italic mb-1">{item.event}</h3>
+                </div>
+
+                <div className="text-[#588157] font-serif text-2xl w-16 md:w-1/2 text-left hidden md:block">
+                  {index % 2 !== 0 ? item.time : ''}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-    </section>
+      </section>
 
-    <section class="wishes">
-        <h2>Пожелания</h2>
-        <p>Пожалуйста, не дарите нам цветы! Мы не успеем насладиться их красотой и ароматом.</p>
-        <div class="accent-box">
-            Вместо них мы будем рады <strong>вашим улыбкам и хорошему настроению!</strong>
+      {/* Локация */}
+      <section className="py-32 bg-[#f0f2ed] px-6">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+          <div className="space-y-10">
+            <MapPin className="w-10 h-10 text-[#588157]" />
+            <h2 className="text-4xl md:text-5xl font-serif italic leading-tight">Место <br/>проведения</h2>
+            <div className="space-y-4">
+              <p className="text-2xl font-serif text-[#1a1a1a]">{CONFIG.location.name}</p>
+              <p className="text-gray-500 text-lg leading-relaxed italic">{CONFIG.location.address}</p>
+            </div>
+            <a 
+              href={CONFIG.location.link} 
+              target="_blank" 
+              rel="noreferrer"
+              className="inline-flex items-center gap-4 px-10 py-4 bg-[#344e41] text-white rounded-full hover:bg-[#588157] transition-all uppercase text-[10px] tracking-[0.2em] font-bold shadow-xl"
+            >
+              Открыть карту <Sparkles className="w-4 h-4" />
+            </a>
+          </div>
+          <div className="aspect-[4/5] rounded-[4rem] overflow-hidden shadow-2xl bg-gray-200">
+            {/* Заглушка для фото места или вставка карты */}
+            <div className="w-full h-full flex items-center justify-center text-gray-400 italic bg-[#e5e7e1]">
+              [Фото Хутора Столинский]
+            </div>
+          </div>
         </div>
-    </section>
+      </section>
 
-    <footer style="padding: 40px; text-align: center; font-size: 0.8rem; color: #999;">
-        До встречи 15 мая 2026 года!
-    </footer>
+      {/* Подарки / Цветы */}
+      <section className="py-32 px-6 bg-white">
+        <div className="max-w-2xl mx-auto bg-[#f9faf8] p-12 md:p-20 rounded-[4rem] text-center border border-[#eef0eb] relative overflow-hidden">
+          <Star className="absolute -top-10 -right-10 w-40 h-40 text-white opacity-50" />
+          <Gift className="w-10 h-10 mx-auto mb-10 text-[#588157]" />
+          <h2 className="text-3xl font-serif mb-8 italic">Важно знать</h2>
+          <p className="text-gray-500 text-lg leading-relaxed italic font-light relative z-10">
+            {CONFIG.giftText}
+          </p>
+        </div>
+      </section>
 
-</body>
-</html>
+      {/* RSVP Форма */}
+      <section className="py-32 bg-[#f0f2ed] px-6">
+        <div className="max-w-2xl mx-auto p-10 md:p-20 bg-white rounded-[4rem] shadow-xl">
+          {!isSubmitted ? (
+            <>
+              <h2 className="text-4xl font-serif text-center mb-6 italic">Подтверждение</h2>
+              <p className="text-center text-[#588157] mb-16 text-[10px] uppercase tracking-[0.4em] font-bold">Будем ждать ваш ответ до {new Date(CONFIG.rsvpDeadline).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}</p>
+              
+              <form onSubmit={handleRsvpSubmit} className="space-y-10">
+                <div className="relative group">
+                  <label className="block text-[10px] uppercase tracking-widest mb-4 font-bold text-gray-400">Ваше имя</label>
+                  <input 
+                    type="text" 
+                    required
+                    className="w-full bg-transparent border-b border-[#eef0eb] py-4 focus:outline-none focus:border-[#588157] transition-all italic text-xl text-[#1a1a1a]"
+                    placeholder="Имя Фамилия"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <button 
+                    type="button"
+                    onClick={() => setRsvpStatus('yes')}
+                    className={`py-5 rounded-3xl border transition-all flex flex-col items-center gap-2 ${rsvpStatus === 'yes' ? 'bg-[#344e41] text-white border-[#344e41] shadow-lg' : 'bg-white border-[#eef0eb] text-gray-400'}`}
+                  >
+                    <Check className="w-5 h-5" /> 
+                    <span className="text-[9px] uppercase tracking-widest font-bold">Приду</span>
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => setRsvpStatus('no')}
+                    className={`py-5 rounded-3xl border transition-all flex flex-col items-center gap-2 ${rsvpStatus === 'no' ? 'bg-[#1a1a1a] text-white border-[#1a1a1a] shadow-lg' : 'bg-white border-[#eef0eb] text-gray-400'}`}
+                  >
+                    <X className="w-5 h-5" /> 
+                    <span className="text-[9px] uppercase tracking-widest font-bold">Не смогу</span>
+                  </button>
+                </div>
+
+                {rsvpStatus === 'yes' && (
+                  <div className="space-y-10 pt-4">
+                    <div>
+                      <label className="block text-[10px] uppercase tracking-widest mb-4 font-bold text-gray-400">Предпочтения по еде</label>
+                      <select 
+                        className="w-full bg-transparent border-b border-[#eef0eb] py-4 focus:outline-none italic text-lg"
+                        value={formData.food}
+                        onChange={(e) => setFormData({...formData, food: e.target.value})}
+                      >
+                        <option value="">Не выбрано</option>
+                        <option value="meat">Мясо</option>
+                        <option value="fish">Рыба</option>
+                        <option value="veg">Вегетарианское</option>
+                      </select>
+                    </div>
+                    <div className="flex items-center justify-between p-6 bg-[#f9faf8] rounded-3xl border border-[#eef0eb]">
+                      <span className="font-serif italic text-lg">Нужен ли трансфер?</span>
+                      <input 
+                        type="checkbox" 
+                        className="w-6 h-6 accent-[#344e41]"
+                        checked={formData.transfer}
+                        onChange={(e) => setFormData({...formData, transfer: e.target.checked})}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <button 
+                  type="submit"
+                  disabled={!rsvpStatus || !formData.name}
+                  className={`w-full py-6 rounded-full text-white font-bold tracking-[0.3em] uppercase transition-all shadow-xl ${rsvpStatus ? 'bg-[#344e41] hover:bg-[#588157]' : 'bg-gray-200 cursor-not-allowed text-gray-400'}`}
+                >
+                  Отправить
+                </button>
+              </form>
+            </>
+          ) : (
+            <div className="text-center py-10">
+              <Check className="w-16 h-16 text-[#588157] mx-auto mb-8" />
+              <h2 className="text-4xl font-serif mb-6 italic">Спасибо!</h2>
+              <p className="text-gray-500 italic text-lg">Мы получили ваш ответ и очень ждем встречи!</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Контакты */}
+      <section className="py-24 px-6 text-center bg-white">
+        <div className="max-w-xl mx-auto space-y-8">
+          <Phone className="w-6 h-6 text-[#a3b18a] mx-auto" />
+          <h2 className="text-2xl font-serif italic">Остались вопросы?</h2>
+          <p className="text-gray-500 italic font-light">Свяжитесь с нами, мы с радостью подскажем:</p>
+          <div className="pt-4">
+            <p className="text-lg font-serif mb-1">{CONFIG.contact.name}</p>
+            <a href={`tel:${CONFIG.contact.phone}`} className="text-xl text-[#344e41] font-medium tracking-widest">{CONFIG.contact.phone}</a>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-32 text-center bg-[#f9faf8] border-t border-[#eef0eb]">
+        <div className="mb-12">
+          <Heart className="w-6 h-6 text-[#a3b18a] mx-auto fill-current opacity-30" />
+        </div>
+        <h3 className="text-3xl font-serif mb-4 italic">До встречи на свадьбе!</h3>
+        <p className="text-[#344e41] font-serif text-6xl md:text-8xl mb-16">{CONFIG.names}</p>
+        <p className="text-[9px] uppercase tracking-[0.5em] text-gray-300 font-bold">Alexander & Ksenia Wedding • 2026</p>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
