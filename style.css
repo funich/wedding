@@ -1,0 +1,326 @@
+@import url('https://fonts.googleapis.com/css2?family=Prata&family=Montserrat:wght@100..900&display=swap');
+
+:root {
+    --color-olive-dark: #556b2f;
+    --color-olive-light: #a7b4ae;
+    --color-silver: #a6acaf;
+    --color-hero-bg: #dce3e0;
+    /* Harmonized with image-main.png */
+    --color-text: #2c3e50;
+    --color-gold: #d4af37;
+    --font-heading: "Lucida Calligraphy", "Lucida Handwriting", "Apple Chancery", cursive;
+    --font-serif: 'Prata', serif;
+    --font-body: 'Montserrat', sans-serif;
+    --glass-bg: rgba(255, 255, 255, 0.92);
+    --glass-border: rgba(166, 172, 175, 0.2);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: white;
+    color: var(--color-text);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    margin-bottom: 20px;
+    color: var(--color-olive-dark);
+}
+
+section {
+    padding: 120px 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.container {
+    max-width: 1100px;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 60px 40px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+/* Floral Branches - Growing from corners (30% area) */
+.frame-branch {
+    position: absolute;
+    width: 45vw;
+    /* Increased coverage to match 30% area */
+    max-width: 650px;
+    opacity: 0.95;
+    pointer-events: none;
+    z-index: 15;
+    /* Higher z-index to be on top */
+}
+
+.top-left {
+    top: -40px;
+    left: -40px;
+    transform: rotate(-5deg);
+    transform-origin: top left;
+}
+
+.top-right {
+    top: -40px;
+    right: -40px;
+    transform: rotate(85deg);
+    transform-origin: top right;
+}
+
+.bottom-left {
+    bottom: -40px;
+    left: -40px;
+    transform: rotate(-95deg);
+    transform-origin: bottom left;
+}
+
+.bottom-right {
+    bottom: -40px;
+    right: -40px;
+    transform: rotate(175deg);
+    transform-origin: bottom right;
+}
+
+/* Thicker Gold Frame for Photo */
+.gold-frame-photo {
+    position: relative;
+    display: inline-block;
+    padding: 15px;
+    z-index: 5;
+}
+
+.gold-frame-photo::before,
+.gold-frame-photo::after {
+    content: '';
+    position: absolute;
+    border: 3px solid var(--color-gold);
+    /* Thicker lines as requested */
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.gold-frame-photo::before {
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: none;
+    width: 80%;
+    height: 80%;
+}
+
+.gold-frame-photo::after {
+    bottom: 0;
+    right: 0;
+    border-left: none;
+    border-top: none;
+    width: 80%;
+    height: 80%;
+}
+
+.framed-img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px;
+    display: block;
+}
+
+/* Hero Section */
+#hero {
+    position: relative;
+    background-color: var(--color-hero-bg);
+    /* Harmonized tone */
+    background-image: url('/photo/image-main.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+    height: 100vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 80px;
+}
+
+#hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+}
+
+.hero-content h1 {
+    font-size: 5.5rem;
+    margin-bottom: 15px;
+    color: white;
+    /* Names in white as requested */
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.hero-content p {
+    font-size: 1.8rem;
+    font-family: var(--font-heading);
+    color: white;
+    /* Maintain white for date/countdown */
+}
+
+/* Section Headers Scaling */
+h2,
+#timing h1 {
+    font-size: 3.8rem;
+    margin-bottom: 40px;
+}
+
+/* Timing Chain */
+.timing-chain {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 100px;
+    position: relative;
+}
+
+.timing-chain::before {
+    content: '';
+    position: absolute;
+    top: 70px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: var(--color-olive-dark);
+    opacity: 0.2;
+}
+
+.chain-node {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 5;
+}
+
+.node-icon-wrapper {
+    width: 140px;
+    height: 140px;
+    background: white;
+    border: 1px solid var(--color-olive-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.node-icon-wrapper img {
+    width: 85px;
+    height: 85px;
+}
+
+/* Calendar */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 15px;
+    max-width: 500px;
+    margin: 40px auto 0;
+}
+
+.calendar-day.wedding-day {
+    background-color: var(--color-olive-dark);
+    color: white;
+    transform: scale(1.15);
+}
+
+/* Background Tones */
+.bg-toned {
+    background-color: #f0f4f2;
+}
+
+/* Buttons */
+.btn-rsvp {
+    display: inline-block;
+    background: var(--color-olive-dark);
+    color: white;
+    padding: 22px 60px;
+    border-radius: 45px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-top: 40px;
+}
+
+/* Mobile & PC Adaptability */
+@media screen and (max-width: 992px) {
+    .timing-chain {
+        flex-wrap: wrap;
+        gap: 60px;
+    }
+
+    .timing-chain::before {
+        display: none;
+    }
+
+    .chain-node {
+        flex: 0 0 45%;
+    }
+
+    .frame-branch {
+        width: 55vw;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .hero-content h1 {
+        font-size: 3.5rem;
+    }
+
+    h2,
+    #timing h1 {
+        font-size: 2.8rem !important;
+    }
+
+    .frame-branch {
+        width: 65vw;
+    }
+
+    #hero {
+        background-size: cover;
+        background-position: center 20%;
+    }
+}
