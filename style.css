@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Prata&family=Montserrat:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Prata&family=Pinyon+Script&family=Montserrat:wght@100..900&display=swap');
 
 :root {
     --color-olive-dark: #556b2f;
     --color-olive-light: #a7b4ae;
     --color-silver: #a6acaf;
     --color-hero-bg: #dce3e0;
-    /* Harmonized with image-main.png */
     --color-text: #2c3e50;
     --color-gold: #d4af37;
-    --font-heading: "Lucida Calligraphy", "Lucida Handwriting", "Apple Chancery", cursive;
+    --font-heading: 'Pinyon Script', cursive;
+    /* Cross-device consistent font */
     --font-serif: 'Prata', serif;
     --font-body: 'Montserrat', sans-serif;
     --glass-bg: rgba(255, 255, 255, 0.92);
@@ -68,51 +68,11 @@ section {
     position: relative;
 }
 
-/* Floral Branches - Growing from corners (30% area) */
-.frame-branch {
-    position: absolute;
-    width: 45vw;
-    /* Increased coverage to match 30% area */
-    max-width: 650px;
-    opacity: 0.95;
-    pointer-events: none;
-    z-index: 15;
-    /* Higher z-index to be on top */
-}
-
-.top-left {
-    top: -40px;
-    left: -40px;
-    transform: rotate(-5deg);
-    transform-origin: top left;
-}
-
-.top-right {
-    top: -40px;
-    right: -40px;
-    transform: rotate(85deg);
-    transform-origin: top right;
-}
-
-.bottom-left {
-    bottom: -40px;
-    left: -40px;
-    transform: rotate(-95deg);
-    transform-origin: bottom left;
-}
-
-.bottom-right {
-    bottom: -40px;
-    right: -40px;
-    transform: rotate(175deg);
-    transform-origin: bottom right;
-}
-
-/* Thicker Gold Frame for Photo */
+/* Gold Frame for Photo */
 .gold-frame-photo {
     position: relative;
     display: inline-block;
-    padding: 15px;
+    padding: 20px;
     z-index: 5;
 }
 
@@ -121,7 +81,6 @@ section {
     content: '';
     position: absolute;
     border: 3px solid var(--color-gold);
-    /* Thicker lines as requested */
     width: 100%;
     height: 100%;
     pointer-events: none;
@@ -132,8 +91,8 @@ section {
     left: 0;
     border-right: none;
     border-bottom: none;
-    width: 80%;
-    height: 80%;
+    width: 70%;
+    height: 70%;
 }
 
 .gold-frame-photo::after {
@@ -141,69 +100,129 @@ section {
     right: 0;
     border-left: none;
     border-top: none;
-    width: 80%;
-    height: 80%;
+    width: 70%;
+    height: 70%;
 }
 
 .framed-img {
     width: 100%;
     max-width: 600px;
-    border-radius: 10px;
+    border-radius: 8px;
     display: block;
 }
 
-/* Hero Section */
+/* Hero Section - Restored Clean Look with Blurred Extension */
 #hero {
     position: relative;
     background-color: var(--color-hero-bg);
-    /* Harmonized tone */
-    background-image: url('/photo/image-main.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center center;
     height: 100vh;
     display: flex;
     align-items: flex-end;
     padding-bottom: 80px;
+    z-index: 10;
+}
+
+#hero::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background-image: url('./photo/image-main.png');
+    background-size: cover;
+    background-position: center;
+    filter: blur(40px) brightness(1.05);
+    /* Slight brightness to stay in tone */
+    opacity: 0.7;
+    z-index: -1;
 }
 
 #hero::after {
     content: '';
     position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('./photo/image-main.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    z-index: 1;
+}
+
+/* Gradient overlay on top of the sharp image for readability */
+.hero-content-overlay {
+    position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 50%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
-    z-index: 1;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
+    z-index: 2;
+    pointer-events: none;
 }
 
 .hero-content {
     position: relative;
-    z-index: 5;
+    z-index: 10;
+    /* Above overlay and image */
     width: 100%;
 }
 
 .hero-content h1 {
-    font-size: 5.5rem;
-    margin-bottom: 15px;
+    font-size: 6rem;
+    margin-bottom: 20px;
     color: white;
-    /* Names in white as requested */
-    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
 }
 
 .hero-content p {
-    font-size: 1.8rem;
-    font-family: var(--font-heading);
+    font-size: 2rem;
     color: white;
-    /* Maintain white for date/countdown */
+    margin-bottom: 30px;
+}
+
+/* Restored Original Style Countdown */
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.countdown-item {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 20px;
+    border-radius: 12px;
+    min-width: 110px;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.countdown-item span:first-child {
+    font-size: 2.8rem;
+    font-family: var(--font-serif);
+    display: block;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.countdown-item span:last-child {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 /* Section Headers Scaling */
 h2,
 #timing h1 {
-    font-size: 3.8rem;
-    margin-bottom: 40px;
+    font-size: 4rem;
+    margin-bottom: 50px;
 }
 
 /* Timing Chain */
@@ -261,10 +280,28 @@ h2,
     margin: 40px auto 0;
 }
 
+.calendar-header {
+    font-weight: 700;
+    color: var(--color-olive-dark);
+    font-size: 1.1rem;
+}
+
 .calendar-day.wedding-day {
     background-color: var(--color-olive-dark);
     color: white;
     transform: scale(1.15);
+    position: relative;
+    overflow: visible;
+}
+
+.calendar-day.wedding-day::after {
+    content: '❤';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 1.2rem;
+    color: #ff4d4d;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
 }
 
 /* Background Tones */
@@ -283,6 +320,21 @@ h2,
     font-weight: 600;
     font-size: 1.2rem;
     margin-top: 40px;
+    box-shadow: 0 5px 20px rgba(85, 107, 47, 0.3);
+}
+
+.wishes-illustration {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    margin-bottom: 30px;
+    border-radius: 15px;
+}
+
+#contact a {
+    font-family: var(--font-body) !important;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
 /* Mobile & PC Adaptability */
@@ -299,10 +351,6 @@ h2,
     .chain-node {
         flex: 0 0 45%;
     }
-
-    .frame-branch {
-        width: 55vw;
-    }
 }
 
 @media screen and (max-width: 600px) {
@@ -315,12 +363,21 @@ h2,
         font-size: 2.8rem !important;
     }
 
-    .frame-branch {
-        width: 65vw;
-    }
-
     #hero {
         background-size: cover;
         background-position: center 20%;
+    }
+
+    .countdown {
+        gap: 10px;
+    }
+
+    .countdown-item {
+        min-width: 80px;
+        padding: 15px 10px;
+    }
+
+    .countdown-item span:first-child {
+        font-size: 2rem;
     }
 }
