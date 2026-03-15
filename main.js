@@ -52,7 +52,7 @@ const submitBtn = rsvpForm ? rsvpForm.querySelector('.btn-rsvp') : null;
 
 // Global flag and function for iframe callback
 window.rsvpSubmitted = false;
-window.showRsvpSuccess = function() {
+window.showRsvpSuccess = function () {
     if (rsvpStatus && rsvpForm && submitBtn) {
         rsvpStatus.innerText = 'Спасибо! Ваш ответ успешно отправлен.';
         rsvpStatus.className = 'rsvp-status status-success';
@@ -64,16 +64,16 @@ window.showRsvpSuccess = function() {
 };
 
 if (rsvpForm) {
-    rsvpForm.addEventListener('submit', function(e) {
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6Hb6IL0Zs-OULqheaMgs33uMTaEMkuFxVlCzw1tfhRxXDRSnKD6FdOsnvQTf4J_V8CQ/exec';
-        
+    rsvpForm.addEventListener('submit', function (e) {
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz01D5_wYF0cCEMigOoKZAdGFxNcziZ_DLmtmw6YMqiWKR1VaaBvsV9nWYdXsMvEJB7iw/exec';
+
         // Use traditional form submission via hidden iframe to bypass CORS/Redirect issues
         rsvpForm.action = SCRIPT_URL;
         rsvpForm.method = 'POST';
         rsvpForm.target = 'hidden_iframe';
-        
+
         window.rsvpSubmitted = true;
-        
+
         // Show loading state
         if (submitBtn) {
             submitBtn.disabled = true;
