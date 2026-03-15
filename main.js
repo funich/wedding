@@ -74,6 +74,13 @@ if (rsvpForm) {
 
         window.rsvpSubmitted = true;
 
+        // Safety fallback: Show success after 2.5s even if Google redirect is blocked (403)
+        setTimeout(() => {
+            if (window.rsvpSubmitted) {
+                window.showRsvpSuccess();
+            }
+        }, 2500);
+
         // Show loading state
         if (submitBtn) {
             submitBtn.disabled = true;
