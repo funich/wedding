@@ -1,21 +1,29 @@
 /* 
   HOUSEKEEPING INSTRUCTIONS:
-  1. Create a new Google Sheet.
-  2. In the menu, go to Extensions > Apps Script.
-  3. Delete any code in the editor and paste the code below.
-  4. Click "Deploy" > "New Deployment".
-  5. Select type: "Web App".
-  6. Description: "Wedding RSVP Backend".
-  7. Execute as: "Me" (Your email).
-  8. Who has access: "Anyone".
-  9. Click Deploy, authorize permissions, and copy the "Web App URL".
-  10. Paste the URL into `main.js` in the `SCRIPT_URL` variable.
+  1. Go back to your Google Apps Script editor.
+  2. Replace ALL the previous code with this new version.
+  3. Click "Deploy" > "Manage Deployments".
+  4. Click the "Edit" (pencil icon) on your active deployment.
+  5. Select "New Version".
+  6. Click "Deploy" twice to finalize.
 */
 
 function doPost(e) {
   try {
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    const data = JSON.parse(e.postData.contents);
+    
+    // Support both JSON and Form submissions
+    let data;
+    if (e.postData && e.postData.contents) {
+      try {
+        data = JSON.parse(e.postData.contents);
+      } catch (err) {
+        // If JSON parsing fails, maybe it's parameters
+        data = e.parameter;
+      }
+    } else {
+      data = e.parameter;
+    }
     
     // Add headers if sheet is empty
     if (sheet.getLastRow() === 0) {
@@ -25,10 +33,10 @@ function doPost(e) {
     // Append the new response
     sheet.appendRow([
       new Date(),
-      data.name,
-      data.surname,
-      data.presence,
-      data.message
+      data.name || 'N/A',
+      data.surname || 'N/A',
+      data.presence || 'N/A',
+      data.message || ''
     ]);
     
     return ContentService.createTextOutput(JSON.stringify({ 'result': 'success' }))

@@ -67,13 +67,16 @@ if (rsvpForm) {
 
         try {
             const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6Hb6IL0Zs-OULqheaMgs33uMTaEMkuFxVlCzw1tfhRxXDRSnKD6FdOsnvQTf4J_V8CQ/exec';
-            
+            // Using URLSearchParams is more reliable for no-cors POST to Apps Script
+            const params = new URLSearchParams();
+            formData.forEach((value, key) => params.append(key, value));
+
             await fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors', // Apps Script requires no-cors if not handling preflight
-                body: JSON.stringify(data),
+                mode: 'no-cors',
+                body: params,
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 }
             });
             
