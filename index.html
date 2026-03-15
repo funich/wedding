@@ -183,6 +183,8 @@
         </form>
 
         <div id="rsvp-status" class="rsvp-status"></div>
+        <!-- Hidden iframe for reliable cross-domain submission -->
+        <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(typeof rsvpSubmitted !== 'undefined' && rsvpSubmitted) { showRsvpSuccess(); }"></iframe>
       </div>
     </div>
   </section>

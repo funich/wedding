@@ -48,48 +48,40 @@ reveal();
 // RSVP Form Logic
 const rsvpForm = document.getElementById('rsvp-form');
 const rsvpStatus = document.getElementById('rsvp-status');
+const submitBtn = rsvpForm ? rsvpForm.querySelector('.btn-rsvp') : null;
+
+// Global flag and function for iframe callback
+window.rsvpSubmitted = false;
+window.showRsvpSuccess = function() {
+    if (rsvpStatus && rsvpForm && submitBtn) {
+        rsvpStatus.innerText = 'Спасибо! Ваш ответ успешно отправлен.';
+        rsvpStatus.className = 'rsvp-status status-success';
+        rsvpForm.reset();
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Отправить ответ';
+        window.rsvpSubmitted = false;
+    }
+};
 
 if (rsvpForm) {
-    rsvpForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    rsvpForm.addEventListener('submit', function(e) {
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6Hb6IL0Zs-OULqheaMgs33uMTaEMkuFxVlCzw1tfhRxXDRSnKD6FdOsnvQTf4J_V8CQ/exec';
         
-        const submitBtn = rsvpForm.querySelector('button');
-        const originalBtnText = submitBtn.innerText;
+        // Use traditional form submission via hidden iframe to bypass CORS/Redirect issues
+        rsvpForm.action = SCRIPT_URL;
+        rsvpForm.method = 'POST';
+        rsvpForm.target = 'hidden_iframe';
+        
+        window.rsvpSubmitted = true;
         
         // Show loading state
-        submitBtn.disabled = true;
-        submitBtn.innerText = 'Отправка...';
-        rsvpStatus.innerText = '';
-        rsvpStatus.className = 'rsvp-status';
-
-        const formData = new FormData(rsvpForm);
-        const data = Object.fromEntries(formData.entries());
-
-        try {
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6Hb6IL0Zs-OULqheaMgs33uMTaEMkuFxVlCzw1tfhRxXDRSnKD6FdOsnvQTf4J_V8CQ/exec';
-            // Using URLSearchParams is more reliable for no-cors POST to Apps Script
-            const params = new URLSearchParams();
-            formData.forEach((value, key) => params.append(key, value));
-
-            await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: params,
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            });
-            
-            rsvpStatus.innerText = 'Спасибо! Ваш ответ успешно отправлен.';
-            rsvpStatus.classList.add('status-success');
-            rsvpForm.reset();
-
-        } catch (error) {
-            rsvpStatus.innerText = 'Произошла ошибка. Пожалуйста, попробуйте позже.';
-            rsvpStatus.classList.add('status-error');
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerText = originalBtnText;
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Отправка...';
+        }
+        if (rsvpStatus) {
+            rsvpStatus.innerText = '';
+            rsvpStatus.className = 'rsvp-status';
         }
     });
 }

@@ -1,49 +1,22 @@
 /* 
-  HOUSEKEEPING INSTRUCTIONS:
-  1. Go back to your Google Apps Script editor.
-  2. Replace ALL the previous code with this new version.
-  3. Click "Deploy" > "Manage Deployments".
-  4. Click the "Edit" (pencil icon) on your active deployment.
-  5. Select "New Version".
-  6. Click "Deploy" twice to finalize.
+  NEW VERSION - HIDDEN IFRAME COMPATIBLE
+  ======================================
+  1. Replace ALL code in Apps Script with this.
+  2. Deploy > New Deployment > Web App > Anyone.
+  3. Ensure you have columns: Date, Name, Surname, Presence, Message.
 */
 
 function doPost(e) {
-  try {
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    
-    // Support both JSON and Form submissions
-    let data;
-    if (e.postData && e.postData.contents) {
-      try {
-        data = JSON.parse(e.postData.contents);
-      } catch (err) {
-        // If JSON parsing fails, maybe it's parameters
-        data = e.parameter;
-      }
-    } else {
-      data = e.parameter;
-    }
-    
-    // Add headers if sheet is empty
-    if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['Дата', 'Имя', 'Фамилия', 'Присутствие', 'Комментарий']);
-    }
-    
-    // Append the new response
-    sheet.appendRow([
-      new Date(),
-      data.name || 'N/A',
-      data.surname || 'N/A',
-      data.presence || 'N/A',
-      data.message || ''
-    ]);
-    
-    return ContentService.createTextOutput(JSON.stringify({ 'result': 'success' }))
-      .setMimeType(ContentService.MimeType.JSON);
-      
-  } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({ 'result': 'error', 'error': error.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var row = [
+    new Date(),
+    e.parameter.name || "N/A",
+    e.parameter.surname || "N/A",
+    e.parameter.presence || "N/A",
+    e.parameter.message || ""
+  ];
+  sheet.appendRow(row);
+  
+  // Return a success message that can be read or just ignore
+  return ContentService.createTextOutput("Success").setMimeType(ContentService.MimeType.TEXT);
 }
