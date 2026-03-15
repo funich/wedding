@@ -66,24 +66,25 @@ if (rsvpForm) {
         const data = Object.fromEntries(formData.entries());
 
         try {
-            // NOTE: Replace this URL with your Google Apps Script URL after setup
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-PLACEHOLDER/exec';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6Hb6IL0Zs-OULqheaMgs33uMTaEMkuFxVlCzw1tfhRxXDRSnKD6FdOsnvQTf4J_V8CQ/exec';
             
-            // For now, we simulate success since the user hasn't set up the URL yet
-            // In a real scenario, we would use: 
-            // await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) });
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Apps Script requires no-cors if not handling preflight
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
             
-            setTimeout(() => {
-                rsvpStatus.innerText = 'Спасибо! Ваш ответ успешно отправлен.';
-                rsvpStatus.classList.add('status-success');
-                rsvpForm.reset();
-                submitBtn.disabled = false;
-                submitBtn.innerText = originalBtnText;
-            }, 1000);
+            rsvpStatus.innerText = 'Спасибо! Ваш ответ успешно отправлен.';
+            rsvpStatus.classList.add('status-success');
+            rsvpForm.reset();
 
         } catch (error) {
             rsvpStatus.innerText = 'Произошла ошибка. Пожалуйста, попробуйте позже.';
             rsvpStatus.classList.add('status-error');
+        } finally {
             submitBtn.disabled = false;
             submitBtn.innerText = originalBtnText;
         }
