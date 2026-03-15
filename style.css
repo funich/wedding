@@ -469,3 +469,123 @@ h2,
         font-size: 1.6rem !important;
     }
 }
+
+/* RSVP Form Styles */
+.rsvp-form {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    text-align: left;
+}
+
+.form-group {
+    display: flex;
+    gap: 15px;
+}
+
+.form-group input, 
+.form-group textarea {
+    flex: 1;
+    padding: 15px 20px;
+    border: 1px solid rgba(105, 114, 83, 0.3);
+    border-radius: 12px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-olive-dark);
+    background: white;
+    box-shadow: 0 4px 15px rgba(105, 114, 83, 0.1);
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.presence-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.presence-toggle p {
+    font-weight: 600;
+    color: var(--color-olive-dark);
+    margin: 0;
+}
+
+.radio-group {
+    display: flex;
+    gap: 30px;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: var(--color-olive-dark);
+}
+
+.radio-label input {
+    display: none;
+}
+
+.radio-custom {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--color-olive-light);
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.radio-label input:checked + .radio-custom {
+    border-color: var(--color-olive-dark);
+    background: var(--color-olive-light);
+}
+
+.radio-label input:checked + .radio-custom::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: var(--color-olive-dark);
+    border-radius: 50%;
+}
+
+.rsvp-status {
+    margin-top: 20px;
+    font-weight: 600;
+    min-height: 24px;
+}
+
+.status-success {
+    color: #4CAF50;
+}
+
+.status-error {
+    color: #f44336;
+}
+
+@media (max-width: 600px) {
+    .form-group {
+        flex-direction: column;
+    }
+    
+    .radio-group {
+        flex-direction: column;
+        gap: 15px;
+    }
+}

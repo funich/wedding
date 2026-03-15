@@ -44,3 +44,48 @@ function reveal() {
 
 window.addEventListener("scroll", reveal);
 reveal();
+
+// RSVP Form Logic
+const rsvpForm = document.getElementById('rsvp-form');
+const rsvpStatus = document.getElementById('rsvp-status');
+
+if (rsvpForm) {
+    rsvpForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const submitBtn = rsvpForm.querySelector('button');
+        const originalBtnText = submitBtn.innerText;
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Отправка...';
+        rsvpStatus.innerText = '';
+        rsvpStatus.className = 'rsvp-status';
+
+        const formData = new FormData(rsvpForm);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            // NOTE: Replace this URL with your Google Apps Script URL after setup
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-PLACEHOLDER/exec';
+            
+            // For now, we simulate success since the user hasn't set up the URL yet
+            // In a real scenario, we would use: 
+            // await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) });
+            
+            setTimeout(() => {
+                rsvpStatus.innerText = 'Спасибо! Ваш ответ успешно отправлен.';
+                rsvpStatus.classList.add('status-success');
+                rsvpForm.reset();
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalBtnText;
+            }, 1000);
+
+        } catch (error) {
+            rsvpStatus.innerText = 'Произошла ошибка. Пожалуйста, попробуйте позже.';
+            rsvpStatus.classList.add('status-error');
+            submitBtn.disabled = false;
+            submitBtn.innerText = originalBtnText;
+        }
+    });
+}

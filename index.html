@@ -151,11 +151,38 @@
     <div class="container">
       <div class="glass-card">
         <h2>Анкета гостя</h2>
-        <p style="font-size: 1.3rem;">Пожалуйста, подтвердите ваше присутствие, чтобы мы могли лучше подготовиться к
-          встрече с вами.</p>
-        <a href="https://forms.google.com" target="_blank" class="btn-rsvp">Заполнить анкету</a>
-        <p style="margin-top: 40px; font-size: 1.1rem; color: var(--color-olive-dark); font-weight: bold;">* Пожалуйста,
-          сделайте это до 25 апреля</p>
+        <p style="font-size: 1.1rem; color: var(--color-olive-dark);">Пожалуйста, подтвердите ваше присутствие до 25 апреля</p>
+        
+        <form id="rsvp-form" class="rsvp-form">
+          <div class="form-group">
+            <input type="text" name="name" placeholder="Имя" required>
+            <input type="text" name="surname" placeholder="Фамилия" required>
+          </div>
+          
+          <div class="presence-toggle">
+            <p>Сможете ли вы присутствовать?</p>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="presence" value="Да" checked>
+                <span class="radio-custom"></span>
+                Да, с удовольствием!
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="presence" value="Нет">
+                <span class="radio-custom"></span>
+                К сожалению, не смогу
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <textarea name="message" placeholder="Ваши пожелания или комментарии (необязательно)"></textarea>
+          </div>
+
+          <button type="submit" class="btn-rsvp">Отправить ответ</button>
+        </form>
+
+        <div id="rsvp-status" class="rsvp-status"></div>
       </div>
     </div>
   </section>
