@@ -270,6 +270,27 @@ h2,
     z-index: 5;
 }
 
+.chain-node span {
+    font-size: 1.1rem;
+    color: var(--color-olive-dark);
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.chain-node h3 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    font-family: var(--font-heading);
+    color: var(--color-olive-dark);
+}
+
+.chain-node p {
+    font-size: 1rem;
+    color: #666;
+    max-width: 200px;
+    line-height: 1.4;
+}
+
 .node-icon-wrapper {
     width: 140px;
     height: 140px;
@@ -432,7 +453,11 @@ h2,
     }
 
     .chain-node h3 {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
+    }
+
+    .chain-node p {
+        font-size: 0.9rem;
     }
 
     .btn-rsvp {
